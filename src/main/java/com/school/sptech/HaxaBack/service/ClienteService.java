@@ -54,6 +54,6 @@ public class ClienteService {
         if (clienteOptional.isEmpty()){
             throw new ObjetoNaoEncontradoException("Cliente não encontrado");
         }
-        clienteRepository.deleteById(id);
+        clienteOptional.get().setAtivo(false);
     }
 }
