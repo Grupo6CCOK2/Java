@@ -17,11 +17,13 @@ public class Cliente {
     private Boolean ativo;
     private LocalDate dataNascimento;
     private LocalDate dataCadastro;
+    @Column(name = "tipo_usuario")
+    private Boolean tipoUsuario;
 
     public Cliente() {
     }
 
-    public Cliente(Integer id, String nome, String sobrenome, String telefone, String email, String senha, Boolean ativo, LocalDate dataNascimento, LocalDate dataCadastro) {
+    public Cliente(Integer id, String nome, String sobrenome, String telefone, String email, String senha, Boolean ativo, LocalDate dataNascimento, LocalDate dataCadastro, Boolean tipoUsuario) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -31,6 +33,7 @@ public class Cliente {
         this.ativo = ativo;
         this.dataNascimento = dataNascimento;
         this.dataCadastro = dataCadastro;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public Integer getId() {
@@ -104,4 +107,13 @@ public class Cliente {
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
+
+    public Boolean getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(Boolean tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
 }
+
