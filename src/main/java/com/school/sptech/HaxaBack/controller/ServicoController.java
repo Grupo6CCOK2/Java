@@ -5,6 +5,7 @@ import com.school.sptech.HaxaBack.dto.ServicoResponseDto;
 import com.school.sptech.HaxaBack.entity.Servico;
 import com.school.sptech.HaxaBack.mapper.ServicoMapper;
 import com.school.sptech.HaxaBack.service.ServicoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class ServicoController {
     }
 
     @GetMapping
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<List<ServicoResponseDto>> exibirTodos() {
 
         List<Servico> servicos = servicoService.buscarServicos();
@@ -38,12 +40,14 @@ public class ServicoController {
     }
 
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<ServicoResponseDto> exibirEspecifico(@PathVariable Integer id) {
         Servico servico = servicoService.buscarPorId(id);
         return ResponseEntity.ok(ServicoMapper.toDto(servico));
     }
 
     @PostMapping
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<ServicoResponseDto> cadastrar(@PathVariable Integer idCliente, @RequestBody @Valid ServicoRequestDto dto) {
         Servico servico = ServicoMapper.toEntity(dto);
         Servico salvo = servicoService.cadastrarServico(idCliente,servico);
@@ -51,6 +55,7 @@ public class ServicoController {
     }
 
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<ServicoResponseDto> atualizar(@PathVariable Integer id, @RequestBody @Valid ServicoRequestDto dto) {
         Servico servico = ServicoMapper.toEntity(dto);
         Servico atualizado = servicoService.atualizarServico(id, servico);

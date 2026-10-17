@@ -11,6 +11,7 @@ public class ClienteResponseDto {
     private Boolean ativo;
     private LocalDate dataNascimento;
     private LocalDate dataCadastro;
+    private Boolean tipoUsuario;
 
     public ClienteResponseDto() {
     }
@@ -24,6 +25,18 @@ public class ClienteResponseDto {
         this.ativo = ativo;
         this.dataNascimento = dataNascimento;
         this.dataCadastro = dataCadastro;
+    }
+
+    public ClienteResponseDto(Integer id, String nome, String sobrenome, String telefone, String email, Boolean ativo, LocalDate dataNascimento, LocalDate dataCadastro, Boolean tipoUsuario) {
+        this.id = id;
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.telefone = telefone;
+        this.email = email;
+        this.ativo = ativo;
+        this.dataNascimento = dataNascimento;
+        this.dataCadastro = dataCadastro;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public Integer getId() {
@@ -88,5 +101,13 @@ public class ClienteResponseDto {
 
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    public Boolean getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(Boolean tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 }
