@@ -55,5 +55,6 @@ public class ClienteService {
             throw new ObjetoNaoEncontradoException("Cliente não encontrado");
         }
         clienteOptional.get().setAtivo(false);
+        clienteRepository.save(clienteOptional.get());
     }
 }

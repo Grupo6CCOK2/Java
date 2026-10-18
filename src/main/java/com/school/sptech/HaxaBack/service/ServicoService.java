@@ -15,11 +15,9 @@ import java.util.Optional;
 public class ServicoService {
 
     private final ServicoRepository servicoRepository;
-    private final ClienteRepository clienteRepository;
 
-    public ServicoService(ServicoRepository servicoRepository, ClienteRepository clienteRepository) {
+    public ServicoService(ServicoRepository servicoRepository) {
         this.servicoRepository = servicoRepository;
-        this.clienteRepository = clienteRepository;
     }
 
     public List<Servico> buscarServicos() {
@@ -34,24 +32,10 @@ public class ServicoService {
         return servicoOptional.get();
     }
 
-    public Servico cadastrarServico(Integer idCliente, Servico servicoParaCriar) {
-
-        Optional<Cliente> clienteOptional = clienteRepository.findById(idCliente);
-
-        if (clienteOptional.isEmpty()) {
-            throw new ObjetoNaoEncontradoException("Cliente não encontrado");
-        }
-
-        Cliente cliente = clienteOptional.get();
-
-        if (cliente.getTipoUsuario() != null && cliente.getTipoUsuario() == false) {
-            throw new RuntimeException("Acesso negado! Apenas funcionários podem cadastrar serviços.");
-        }
-
+    public Servico cadastrarServico(Servico servicoParaCriar) {
         if (servicoRepository.existsByTipoServico(servicoParaCriar.getTipoServico())) {
             throw new ObjetoDuplicadoException("Serviço duplicado");
         }
-
 
         return servicoRepository.save(servicoParaCriar);
     }
@@ -67,6 +51,14 @@ public class ServicoService {
 
         servicoParaAtualizar.setIdServico(id);
         return servicoRepository.save(servicoParaAtualizar);
+    }
+
+    public void removerServico(Integer id) {
+        if (!servicoRepository.existsById(id)) {
+            throw new ObjetoNaoEncontradoException("Serviço não encontrado");
+        }
+
+        servicoRepository.deleteById(id);
     }
 
 }

@@ -13,9 +13,9 @@ public class StatusValidator implements ConstraintValidator<Status, String> {
             return true;
         }
 
-        return status.equals("pendente")
-                || status.equals("confirmado")
-                || status.equals("concluído")
-                || status.equals("cancelado");
+        return status.equalsIgnoreCase("pendente")
+                || status.equalsIgnoreCase("confirmado")
+                || status.equalsIgnoreCase("concluido")
+                || status.equalsIgnoreCase("cancelado");
     }
 }

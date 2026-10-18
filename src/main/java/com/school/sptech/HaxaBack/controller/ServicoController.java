@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/servicos")
+@CrossOrigin(origins = "*")
 public class ServicoController {
 
     private final ServicoService servicoService;
@@ -44,17 +45,22 @@ public class ServicoController {
     }
 
     @PostMapping
-    public ResponseEntity<ServicoResponseDto> cadastrar(@PathVariable Integer idCliente, @RequestBody @Valid ServicoRequestDto dto) {
+    public ResponseEntity<ServicoResponseDto> cadastrar(@Valid @RequestBody  ServicoRequestDto dto) {
         Servico servico = ServicoMapper.toEntity(dto);
-        Servico salvo = servicoService.cadastrarServico(idCliente,servico);
+        Servico salvo = servicoService.cadastrarServico(servico);
         return ResponseEntity.status(201).body(ServicoMapper.toDto(salvo));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServicoResponseDto> atualizar(@PathVariable Integer id, @RequestBody @Valid ServicoRequestDto dto) {
+    public ResponseEntity<ServicoResponseDto> atualizar(@PathVariable Integer id, @Valid @RequestBody  ServicoRequestDto dto) {
         Servico servico = ServicoMapper.toEntity(dto);
         Servico atualizado = servicoService.atualizarServico(id, servico);
         return ResponseEntity.ok(ServicoMapper.toDto(atualizado));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> remover(@PathVariable Integer id) {
+        servicoService.removerServico(id);
+        return ResponseEntity.ok().build();
+    }
 }
