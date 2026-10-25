@@ -1,38 +1,48 @@
 package com.school.sptech.HaxaBack.dto;
 
 import com.school.sptech.HaxaBack.validator.SenhaForte;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public class ClienteRequestDto {
+
+    @Schema(description = "Nome do cliente", example = "Ana")
     @NotBlank
     @Size(max = 45)
     private String nome;
 
+    @Schema(description = "Sobrenome do cliente", example = "Oliveira")
     @NotBlank
     @Size(max = 45)
     private String sobrenome;
 
+    @Schema(description = "Telefone do cliente com 11 caracteres", example = "11987654321")
     @NotBlank
     @Size(min = 11, max = 11)
     private String telefone;
 
+    @Schema(description = "E-mail do cliente", example = "ana.oliveira@exemplo.com")
     @NotBlank
     @Email
     private String email;
 
+    @Schema(description = "Senha informada pelo cliente", example = "Exemplo123", format = "password", accessMode = Schema.AccessMode.WRITE_ONLY)
     @NotBlank
     @SenhaForte
     private String senha;
 
+    @Schema(description = "Indica se o cliente está ativo", example = "true")
     @NotNull
     private Boolean ativo;
 
+    @Schema(description = "Data de nascimento do cliente", example = "2005-08-20")
     @NotNull
     @Past
     private LocalDate dataNascimento;
 
+    @Schema(description = "Data de cadastro do cliente", example = "2026-10-25")
     @NotNull
     private LocalDate dataCadastro;
 

@@ -1,10 +1,17 @@
 package com.school.sptech.HaxaBack.dto;
 
-public class ServicoResponseDto {
-    private Integer idServico;
-    private String tipoServico;
-    private Double valor;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+public class ServicoResponseDto {
+
+    @Schema(description = "Identificador do serviço", example = "1")
+    private Integer idServico;
+
+    @Schema(description = "Nome ou tipo do serviço", example = "Corte de cabelo")
+    private String tipoServico;
+
+    @Schema(description = "Valor cobrado pelo serviço", example = "50.00")
+    private Double valor;
 
     public Integer getIdServico() { return idServico; }
     public void setIdServico(Integer idServico) { this.idServico = idServico; }
