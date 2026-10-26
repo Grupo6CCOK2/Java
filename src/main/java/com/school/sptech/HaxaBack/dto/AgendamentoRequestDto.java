@@ -1,8 +1,8 @@
 package com.school.sptech.HaxaBack.dto;
 
-import com.school.sptech.HaxaBack.validator.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -25,8 +25,7 @@ public class AgendamentoRequestDto {
                     "concluído",
                     "cancelado"
             })
-    @NotNull
-    @Status
+    @NotBlank
     private String status;
 
     @Schema(description = "ID do cliente responsável pelo agendamento", example = "1")
