@@ -46,6 +46,8 @@ public class ClienteRequestDto {
     @NotNull
     private LocalDate dataCadastro;
 
+    private Boolean tipoUsuario;
+
     public ClienteRequestDto() {
     }
 
@@ -58,6 +60,18 @@ public class ClienteRequestDto {
         this.ativo = ativo;
         this.dataNascimento = dataNascimento;
         this.dataCadastro = dataCadastro;
+    }
+
+    public ClienteRequestDto(String nome, String sobrenome, String telefone, String email, String senha, Boolean ativo, LocalDate dataNascimento, LocalDate dataCadastro, Boolean tipoUsuario) {
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.telefone = telefone;
+        this.email = email;
+        this.senha = senha;
+        this.ativo = ativo;
+        this.dataNascimento = dataNascimento;
+        this.dataCadastro = dataCadastro;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public String getNome() {
@@ -122,5 +136,13 @@ public class ClienteRequestDto {
 
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    public Boolean getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(Boolean tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 }

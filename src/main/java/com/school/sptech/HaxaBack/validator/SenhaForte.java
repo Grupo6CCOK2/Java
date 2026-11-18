@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 public @interface SenhaForte {
 
     String message() default
-            "senha deve possuir pelo menos 8 caracteres, uma letra e um número";
+            "A senha deve ter pelo menos 8 caracteres, uma letra e um número";
 
     Class<?>[] groups() default {};
 
