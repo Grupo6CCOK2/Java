@@ -5,6 +5,7 @@ import com.school.sptech.HaxaBack.dto.ServicoResponseDto;
 import com.school.sptech.HaxaBack.entity.Servico;
 import com.school.sptech.HaxaBack.mapper.ServicoMapper;
 import com.school.sptech.HaxaBack.service.ServicoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,6 +28,7 @@ public class ServicoController {
 
     @Operation(summary = "Busca os Serviços", description = "Busca todos os serviços no sistema")
     @GetMapping
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<List<ServicoResponseDto>> exibirTodos() {
 
         List<Servico> servicos = servicoService.buscarServicos();
@@ -43,6 +45,7 @@ public class ServicoController {
 
     @Operation(summary = "Busca um serviço", description = "Busca um serviço no sistema")
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<ServicoResponseDto> exibirEspecifico(@PathVariable Integer id) {
         Servico servico = servicoService.buscarPorId(id);
         return ResponseEntity.ok(ServicoMapper.toDto(servico));
@@ -50,6 +53,7 @@ public class ServicoController {
 
     @Operation(summary = "Cadastrar Serviço", description = "Realiza o cadastro de um novo serviço no sistema")
     @PostMapping
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<ServicoResponseDto> cadastrar(@PathVariable Integer idCliente, @RequestBody @Valid ServicoRequestDto dto) {
         Servico servico = ServicoMapper.toEntity(dto);
         Servico salvo = servicoService.cadastrarServico(idCliente,servico);
@@ -58,6 +62,7 @@ public class ServicoController {
 
     @Operation(summary = "Atualiza um serviço", description = "Atualiza um serviço do sistema")
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<ServicoResponseDto> atualizar(@PathVariable Integer id, @RequestBody @Valid ServicoRequestDto dto) {
         Servico servico = ServicoMapper.toEntity(dto);
         Servico atualizado = servicoService.atualizarServico(id, servico);
