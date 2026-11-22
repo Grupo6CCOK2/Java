@@ -14,10 +14,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ClienteService {
@@ -32,6 +34,9 @@ public class ClienteService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private SessaoService sessaoService;
 
     public ClienteService(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
@@ -50,7 +55,7 @@ public class ClienteService {
     }
 
     public Cliente cadastarCliente(Cliente clienteParaCriar) {
-        if (clienteRepository.existsByNomeAndSobrenome(clienteParaCriar.getNome(), clienteParaCriar.getSobrenome())){
+        if (clienteRepository.existsByEmail(clienteParaCriar.getEmail())){
             throw new ObjetoDuplicadoException("Cliente duplicado");
         }
 
@@ -60,6 +65,7 @@ public class ClienteService {
         return clienteRepository.save(clienteParaCriar);
     }
 
+    @Transactional
     public ClienteTokenDto autenticar(Cliente cliente) {
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
                 cliente.getEmail(), cliente.getSenha());
@@ -74,7 +80,10 @@ public class ClienteService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        final String token = gerenciadorTokenJwt.generateToken(authentication);
+        String jti = UUID.randomUUID().toString();
+        sessaoService.criar(clienteAutenticado, jti);
+
+        final String token = gerenciadorTokenJwt.generateToken(authentication, jti);
 
         return ClienteMapper.of(clienteAutenticado, token);
     }
@@ -84,7 +93,7 @@ public class ClienteService {
             throw new ObjetoNaoEncontradoException("Cliente não encontrado");
         }
 
-        if (clienteRepository.existsByNomeAndSobrenomeAndIdNot(clienteParaAtualizar.getNome(),  clienteParaAtualizar.getSobrenome(), id)){
+        if (clienteRepository.existsByEmailAndIdNot(clienteParaAtualizar.getEmail(), id)){
             throw new ObjetoDuplicadoException("Cliente duplicado");
         }
 
@@ -95,11 +104,14 @@ public class ClienteService {
         return clienteRepository.save(clienteParaAtualizar);
     }
 
+    @Transactional
     public void deletarCliente(Integer id){
         Optional<Cliente> clienteOptional = clienteRepository.findById(id);
         if (clienteOptional.isEmpty()){
             throw new ObjetoNaoEncontradoException("Cliente não encontrado");
         }
-        clienteOptional.get().setAtivo(false);
+        Cliente cliente = clienteOptional.get();
+        cliente.setAtivo(false);
+        clienteRepository.save(cliente);
     }
 }

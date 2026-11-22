@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ClienteRequestDto {
 
@@ -26,6 +27,7 @@ public class ClienteRequestDto {
     @Schema(description = "E-mail do cliente", example = "ana.oliveira@exemplo.com")
     @NotBlank
     @Email
+    @Size(max = 45)
     private String email;
 
     @Schema(description = "Senha informada pelo cliente", example = "Exemplo123", format = "password", accessMode = Schema.AccessMode.WRITE_ONLY)
@@ -42,16 +44,19 @@ public class ClienteRequestDto {
     @Past
     private LocalDate dataNascimento;
 
-    @Schema(description = "Data de cadastro do cliente", example = "2026-10-25")
+    @Schema(description = "Data e hora de cadastro do cliente", example = "2026-10-25T10:00:00")
     @NotNull
-    private LocalDate dataCadastro;
+    private LocalDateTime dataCadastro;
 
-    private Boolean tipoUsuario;
+    @Schema(description = "Tipo do usuário (0 = Cliente, 1 = Funcionário, 2 = Administrador)", example = "0")
+    @Min(0)
+    @Max(2)
+    private Integer tipoUsuario;
 
     public ClienteRequestDto() {
     }
 
-    public ClienteRequestDto(String nome, String sobrenome, String telefone, String email, String senha, Boolean ativo, LocalDate dataNascimento, LocalDate dataCadastro) {
+    public ClienteRequestDto(String nome, String sobrenome, String telefone, String email, String senha, Boolean ativo, LocalDate dataNascimento, LocalDateTime dataCadastro) {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.telefone = telefone;
@@ -62,7 +67,7 @@ public class ClienteRequestDto {
         this.dataCadastro = dataCadastro;
     }
 
-    public ClienteRequestDto(String nome, String sobrenome, String telefone, String email, String senha, Boolean ativo, LocalDate dataNascimento, LocalDate dataCadastro, Boolean tipoUsuario) {
+    public ClienteRequestDto(String nome, String sobrenome, String telefone, String email, String senha, Boolean ativo, LocalDate dataNascimento, LocalDateTime dataCadastro, Integer tipoUsuario) {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.telefone = telefone;
@@ -130,19 +135,19 @@ public class ClienteRequestDto {
         this.dataNascimento = dataNascimento;
     }
 
-    public LocalDate getDataCadastro() {
+    public LocalDateTime getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(LocalDate dataCadastro) {
+    public void setDataCadastro(LocalDateTime dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
-    public Boolean getTipoUsuario() {
+    public Integer getTipoUsuario() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(Boolean tipoUsuario) {
+    public void setTipoUsuario(Integer tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 }

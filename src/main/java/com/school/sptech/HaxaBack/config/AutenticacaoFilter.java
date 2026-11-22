@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.school.sptech.HaxaBack.controller.ClienteController;
 import com.school.sptech.HaxaBack.service.AutenticacaoService;
+import com.school.sptech.HaxaBack.service.SessaoService;
 
 import java.io.IOException;
 
@@ -27,10 +28,14 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
 
     private final AutenticacaoService autenticacaoService;
     private final GerenciadorTokenJwt jwtTokenManager;
+    private final SessaoService sessaoService;
 
-    public AutenticacaoFilter(AutenticacaoService autenticacaoService, GerenciadorTokenJwt jwtTokenManager) {
+    public AutenticacaoFilter(AutenticacaoService autenticacaoService,
+                              GerenciadorTokenJwt jwtTokenManager,
+                              SessaoService sessaoService) {
         this.autenticacaoService = autenticacaoService;
         this.jwtTokenManager = jwtTokenManager;
+        this.sessaoService = sessaoService;
     }
 
     @Override
@@ -85,7 +90,10 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
     private void registrarAutenticacaoNoContexto(HttpServletRequest request, String username, String jwtToken) {
         UserDetails userDetails = autenticacaoService.loadUserByUsername(username);
 
-        if (jwtTokenManager.validateToken(jwtToken, userDetails)) {
+        String jti = jwtTokenManager.getJtiFromToken(jwtToken);
+        boolean sessaoAtiva = sessaoService.sessaoEstaAtiva(jti, username);
+
+        if (jwtTokenManager.validateToken(jwtToken, userDetails) && sessaoAtiva) {
             UsernamePasswordAuthenticationToken autenticacao = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
             autenticacao.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

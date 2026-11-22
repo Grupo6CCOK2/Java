@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -24,11 +25,16 @@ public class GerenciadorTokenJwt {
     private long jwtTokenValidity;
 
     public String generateToken(final Authentication authentication) {
+        return generateToken(authentication, UUID.randomUUID().toString());
+    }
+
+    public String generateToken(final Authentication authentication, final String jti) {
         final String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
+                .id(jti)
                 .subject(authentication.getName())
                 .claim("authorities", authorities)
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -70,5 +76,9 @@ public class GerenciadorTokenJwt {
 
     private SecretKey parseSecret() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(this.secret));
+    }
+
+    public String getJtiFromToken(String token) {
+        return getClaimForToken(token, Claims::getId);
     }
 }

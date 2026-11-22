@@ -2,6 +2,8 @@ package com.school.sptech.HaxaBack.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
+
 public class ServicoResponseDto {
 
     @Schema(description = "Identificador do serviço", example = "1")
@@ -11,7 +13,7 @@ public class ServicoResponseDto {
     private String tipoServico;
 
     @Schema(description = "Valor cobrado pelo serviço", example = "50.00")
-    private Double valor;
+    private BigDecimal valor;
 
     public Integer getIdServico() { return idServico; }
     public void setIdServico(Integer idServico) { this.idServico = idServico; }
@@ -19,8 +21,7 @@ public class ServicoResponseDto {
     public String getTipoServico() { return tipoServico; }
     public void setTipoServico(String tipoServico) { this.tipoServico = tipoServico; }
 
-    public Double getValor() { return valor; }
-    public void setValor(
-            Double valor) { this.valor = valor; }
+    public BigDecimal getValor() { return valor; }
+    public void setValor(BigDecimal valor) { this.valor = valor; }
 
 }

@@ -16,7 +16,7 @@ public class ClienteDetalhesDto implements UserDetails {
 
     private final String senha;
 
-    private final Boolean tipoUsuario;
+    private final Integer tipoUsuario;
 
     public ClienteDetalhesDto(Cliente cliente) {
         this.nome = cliente.getNome();
@@ -29,13 +29,20 @@ public class ClienteDetalhesDto implements UserDetails {
         return nome;
     }
 
-    public Boolean getTipoUsuario() {
+    public Integer getTipoUsuario() {
         return tipoUsuario;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String perfil = Boolean.TRUE.equals(this.tipoUsuario) ? "ROLE_FUNCIONARIO" : "ROLE_CLIENTE";
+        String perfil;
+        if (Integer.valueOf(2).equals(this.tipoUsuario)) {
+            perfil = "ROLE_ADMIN";
+        } else if (Integer.valueOf(1).equals(this.tipoUsuario)) {
+            perfil = "ROLE_FUNCIONARIO";
+        } else {
+            perfil = "ROLE_CLIENTE";
+        }
         return List.of(new SimpleGrantedAuthority(perfil));
     }
 

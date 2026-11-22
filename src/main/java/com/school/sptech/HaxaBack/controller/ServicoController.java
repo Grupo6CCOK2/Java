@@ -54,9 +54,9 @@ public class ServicoController {
     @Operation(summary = "Cadastrar Serviço", description = "Realiza o cadastro de um novo serviço no sistema")
     @PostMapping
     @SecurityRequirement(name = "Bearer")
-    public ResponseEntity<ServicoResponseDto> cadastrar(@PathVariable Integer idCliente, @RequestBody @Valid ServicoRequestDto dto) {
+    public ResponseEntity<ServicoResponseDto> cadastrar(@RequestBody @Valid ServicoRequestDto dto) {
         Servico servico = ServicoMapper.toEntity(dto);
-        Servico salvo = servicoService.cadastrarServico(idCliente,servico);
+        Servico salvo = servicoService.cadastrarServico(servico);
         return ResponseEntity.status(201).body(ServicoMapper.toDto(salvo));
     }
 

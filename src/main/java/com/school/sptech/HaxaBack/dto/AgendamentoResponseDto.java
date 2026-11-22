@@ -1,9 +1,12 @@
 package com.school.sptech.HaxaBack.dto;
 
+import com.school.sptech.HaxaBack.entity.StatusAgendamento;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class AgendamentoResponseDto {
 
@@ -16,16 +19,20 @@ public class AgendamentoResponseDto {
     @Schema(description = "Horário do agendamento", example = "14:30:00")
     private LocalTime horario;
 
-    @Schema(description = "Status atual do agendamento", example = "pendente", allowableValues = {
-            "pendente",
-            "confirmado",
-            "concluído",
-            "cancelado"
-    })
-    private String status;
+    @Schema(description = "Status atual do agendamento", example = "Pendente")
+    private StatusAgendamento status;
 
     @Schema(description = "Dados do cliente associado ao agendamento")
     private ClienteResponseDto cliente;
+
+    @Schema(description = "Dados do funcionário responsável pelo agendamento")
+    private FuncionarioResponseDto funcionario;
+
+    @Schema(description = "Dados do dependente associado ao agendamento (quando aplicável)")
+    private DependenteResponseDto dependente;
+
+    @Schema(description = "Serviços associados ao agendamento")
+    private List<ItemServicoResponseDto> itensServico;
 
     public static class ClienteResponseDto {
 
@@ -85,15 +92,148 @@ public class AgendamentoResponseDto {
         }
     }
 
+    public static class FuncionarioResponseDto {
+
+        @Schema(description = "Identificador do funcionário", example = "1")
+        private Integer id;
+
+        @Schema(description = "Identificador do usuário do funcionário", example = "2")
+        private Integer usuarioId;
+
+        @Schema(description = "Nome do funcionário", example = "Carlos")
+        private String nome;
+
+        @Schema(description = "Sobrenome do funcionário", example = "Oliveira")
+        private String sobrenome;
+
+        @Schema(description = "E-mail do funcionário", example = "carlos.oli@email.com")
+        private String email;
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public Integer getUsuarioId() {
+            return usuarioId;
+        }
+
+        public void setUsuarioId(Integer usuarioId) {
+            this.usuarioId = usuarioId;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+
+        public String getSobrenome() {
+            return sobrenome;
+        }
+
+        public void setSobrenome(String sobrenome) {
+            this.sobrenome = sobrenome;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    }
+
+    public static class DependenteResponseDto {
+
+        @Schema(description = "Identificador do dependente", example = "1")
+        private Integer idDependentes;
+
+        @Schema(description = "Nome do dependente", example = "Lucas Silva")
+        private String nome;
+
+        @Schema(description = "Parentesco com o titular", example = "Filho")
+        private String parentesco;
+
+        public Integer getIdDependentes() {
+            return idDependentes;
+        }
+
+        public void setIdDependentes(Integer idDependentes) {
+            this.idDependentes = idDependentes;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+
+        public String getParentesco() {
+            return parentesco;
+        }
+
+        public void setParentesco(String parentesco) {
+            this.parentesco = parentesco;
+        }
+    }
+
+    public static class ItemServicoResponseDto {
+
+        @Schema(description = "Identificador do serviço", example = "1")
+        private Integer idServico;
+
+        @Schema(description = "Tipo do serviço", example = "Corte de Cabelo")
+        private String tipoServico;
+
+        @Schema(description = "Preço unitário aplicado no agendamento", example = "50.00")
+        private BigDecimal precoUnitario;
+
+        public Integer getIdServico() {
+            return idServico;
+        }
+
+        public void setIdServico(Integer idServico) {
+            this.idServico = idServico;
+        }
+
+        public String getTipoServico() {
+            return tipoServico;
+        }
+
+        public void setTipoServico(String tipoServico) {
+            this.tipoServico = tipoServico;
+        }
+
+        public BigDecimal getPrecoUnitario() {
+            return precoUnitario;
+        }
+
+        public void setPrecoUnitario(BigDecimal precoUnitario) {
+            this.precoUnitario = precoUnitario;
+        }
+    }
+
     public AgendamentoResponseDto() {
     }
 
-    public AgendamentoResponseDto(Integer id, LocalDate data, LocalTime horario, String status, ClienteResponseDto cliente) {
+    public AgendamentoResponseDto(Integer id, LocalDate data, LocalTime horario, StatusAgendamento status, ClienteResponseDto cliente, FuncionarioResponseDto funcionario, DependenteResponseDto dependente, List<ItemServicoResponseDto> itensServico) {
         this.id = id;
         this.data = data;
         this.horario = horario;
         this.status = status;
         this.cliente = cliente;
+        this.funcionario = funcionario;
+        this.dependente = dependente;
+        this.itensServico = itensServico;
     }
 
     public Integer getId() {
@@ -120,11 +260,11 @@ public class AgendamentoResponseDto {
         this.horario = horario;
     }
 
-    public String getStatus() {
+    public StatusAgendamento getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusAgendamento status) {
         this.status = status;
     }
 
@@ -134,5 +274,29 @@ public class AgendamentoResponseDto {
 
     public void setCliente(ClienteResponseDto cliente) {
         this.cliente = cliente;
+    }
+
+    public FuncionarioResponseDto getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(FuncionarioResponseDto funcionario) {
+        this.funcionario = funcionario;
+    }
+
+    public DependenteResponseDto getDependente() {
+        return dependente;
+    }
+
+    public void setDependente(DependenteResponseDto dependente) {
+        this.dependente = dependente;
+    }
+
+    public List<ItemServicoResponseDto> getItensServico() {
+        return itensServico;
+    }
+
+    public void setItensServico(List<ItemServicoResponseDto> itensServico) {
+        this.itensServico = itensServico;
     }
 }

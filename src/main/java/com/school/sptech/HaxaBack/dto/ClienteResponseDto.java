@@ -3,6 +3,7 @@ package com.school.sptech.HaxaBack.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ClienteResponseDto {
 
@@ -27,14 +28,16 @@ public class ClienteResponseDto {
     @Schema(description = "Data de nascimento do cliente", example = "2005-08-20")
     private LocalDate dataNascimento;
 
-    @Schema(description = "Data em que o cliente foi cadastrado", example = "2026-10-25")
-    private LocalDate dataCadastro;
-    private Boolean tipoUsuario;
+    @Schema(description = "Data e hora em que o cliente foi cadastrado", example = "2026-10-25T10:00:00")
+    private LocalDateTime dataCadastro;
+
+    @Schema(description = "Tipo do usuário (0 = Cliente, 1 = Funcionário, 2 = Administrador)", example = "0")
+    private Integer tipoUsuario;
 
     public ClienteResponseDto() {
     }
 
-    public ClienteResponseDto(Integer id, String nome, String sobrenome, String telefone, String email, Boolean ativo, LocalDate dataNascimento, LocalDate dataCadastro) {
+    public ClienteResponseDto(Integer id, String nome, String sobrenome, String telefone, String email, Boolean ativo, LocalDate dataNascimento, LocalDateTime dataCadastro) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -45,7 +48,7 @@ public class ClienteResponseDto {
         this.dataCadastro = dataCadastro;
     }
 
-    public ClienteResponseDto(Integer id, String nome, String sobrenome, String telefone, String email, Boolean ativo, LocalDate dataNascimento, LocalDate dataCadastro, Boolean tipoUsuario) {
+    public ClienteResponseDto(Integer id, String nome, String sobrenome, String telefone, String email, Boolean ativo, LocalDate dataNascimento, LocalDateTime dataCadastro, Integer tipoUsuario) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -113,19 +116,19 @@ public class ClienteResponseDto {
         this.dataNascimento = dataNascimento;
     }
 
-    public LocalDate getDataCadastro() {
+    public LocalDateTime getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(LocalDate dataCadastro) {
+    public void setDataCadastro(LocalDateTime dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
-    public Boolean getTipoUsuario() {
+    public Integer getTipoUsuario() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(Boolean tipoUsuario) {
+    public void setTipoUsuario(Integer tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 }

@@ -8,6 +8,7 @@ import com.school.sptech.HaxaBack.service.AgendamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class AgendamentoController {
 
     @Operation(summary = "Busca os agendamentos", description = "Busca todos os agendamentos no sistema")
     @GetMapping
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<List<AgendamentoResponseDto>> buscar(){
         List<Agendamento> agendamentos = agendamentoService.buscar();
 
@@ -36,6 +38,7 @@ public class AgendamentoController {
 
     @Operation(summary = "Busca um agendamento", description = "Busca um agendamento no sistema")
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<AgendamentoResponseDto> buscarPorId(@PathVariable Integer id) {
         Agendamento agendamento = agendamentoService.buscarPorId(id);
 
@@ -44,22 +47,38 @@ public class AgendamentoController {
 
     @Operation(summary = "Cadastrar agendamento", description = "Realiza o cadastro de um novo agendamento no sistema")
     @PostMapping
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<AgendamentoResponseDto> cadastrar(@Valid @RequestBody AgendamentoRequestDto dto){
-        Agendamento agendamento = agendamentoService.cadastrar(AgendamentoMapper.toEntity(dto), dto.getFkUsuario());
+        Agendamento agendamento = agendamentoService.cadastrar(
+                AgendamentoMapper.toEntity(dto),
+                dto.getFkUsuario(),
+                dto.getFkFuncionario(),
+                dto.getFkDependente(),
+                dto.getServicosIds()
+        );
 
         return ResponseEntity.status(201).body(AgendamentoMapper.toResponse(agendamento));
     }
 
     @Operation(summary = "Atualiza um agendamento", description = "Atualiza um agendamento do sistema")
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<AgendamentoResponseDto> atualizar(@PathVariable Integer id, @Valid @RequestBody AgendamentoRequestDto dto){
-        Agendamento agendamento = agendamentoService.atualizar(id, AgendamentoMapper.toEntity(dto), dto.getFkUsuario());
+        Agendamento agendamento = agendamentoService.atualizar(
+                id,
+                AgendamentoMapper.toEntity(dto),
+                dto.getFkUsuario(),
+                dto.getFkFuncionario(),
+                dto.getFkDependente(),
+                dto.getServicosIds()
+        );
 
         return ResponseEntity.status(200).body(AgendamentoMapper.toResponse(agendamento));
     }
 
     @Operation(summary = "Deletar um agendamento", description = "Deletar um agendamento do sistema")
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<Void> deletar(@PathVariable Integer id){
         agendamentoService.deletar(id);
 

@@ -1,5 +1,6 @@
 package com.school.sptech.HaxaBack.controller;
 
+import com.school.sptech.HaxaBack.config.GerenciadorTokenJwt;
 import com.school.sptech.HaxaBack.dto.ClienteLoginDto;
 import com.school.sptech.HaxaBack.dto.ClienteRequestDto;
 import com.school.sptech.HaxaBack.dto.ClienteResponseDto;
@@ -7,9 +8,12 @@ import com.school.sptech.HaxaBack.dto.ClienteTokenDto;
 import com.school.sptech.HaxaBack.entity.Cliente;
 import com.school.sptech.HaxaBack.mapper.ClienteMapper;
 import com.school.sptech.HaxaBack.service.ClienteService;
+import com.school.sptech.HaxaBack.service.SessaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,9 +36,15 @@ public class ClienteController {
     private long jwtValidity;
 
     private final ClienteService clienteService;
+    private final SessaoService sessaoService;
+    private final GerenciadorTokenJwt gerenciadorTokenJwt;
 
-    public ClienteController(ClienteService clienteService) {
+    public ClienteController(ClienteService clienteService,
+                             SessaoService sessaoService,
+                             GerenciadorTokenJwt gerenciadorTokenJwt) {
         this.clienteService = clienteService;
+        this.sessaoService = sessaoService;
+        this.gerenciadorTokenJwt = gerenciadorTokenJwt;
     }
 
     @Operation(summary = "Busca os clientes", description = "Busca todos os clientes no sistema")
@@ -57,7 +67,6 @@ public class ClienteController {
     }
     @Operation(summary = "Cadastrar cliente", description = "Realiza o cadastro de um novo cliente no sistema")
     @PostMapping
-    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<ClienteResponseDto> cadastrar(@Valid @RequestBody ClienteRequestDto dto) {
         Cliente cliente = ClienteMapper.toEntity(dto);
         Cliente salvo = clienteService.cadastarCliente(cliente);
@@ -84,7 +93,17 @@ public class ClienteController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletResponse response) {
+    public ResponseEntity<Void> logout(HttpServletRequest request,
+                                       HttpServletResponse response) {
+        String token = extrairToken(request);
+
+        if (token != null) {
+            try {
+                sessaoService.desativar(gerenciadorTokenJwt.getJtiFromToken(token));
+            } catch (Exception ignored) {
+            }
+        }
+
         ResponseCookie cookie = ResponseCookie.from(COOKIE_NOME, "")
                 .httpOnly(true)
                 .secure(false)
@@ -96,6 +115,24 @@ public class ClienteController {
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         return ResponseEntity.noContent().build();
+    }
+
+    private String extrairToken(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (COOKIE_NOME.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+
+        return null;
     }
 
     @Operation(summary = "Atualiza um cliente", description = "Atualiza um cliente do sistema")

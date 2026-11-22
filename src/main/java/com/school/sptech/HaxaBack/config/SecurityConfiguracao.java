@@ -1,6 +1,5 @@
 package com.school.sptech.HaxaBack.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.school.sptech.HaxaBack.service.AutenticacaoService;
+import com.school.sptech.HaxaBack.service.SessaoService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,11 +30,17 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfiguracao {
 
-    @Autowired
-    private AutenticacaoService autenticacaoService;
+    private final AutenticacaoService autenticacaoService;
+    private final AutenticacaoEntryPoint autenticacaoJwtEntryPoint;
+    private final SessaoService sessaoService;
 
-    @Autowired
-    private AutenticacaoEntryPoint autenticacaoJwtEntryPoint;
+    public SecurityConfiguracao(AutenticacaoService autenticacaoService,
+                                AutenticacaoEntryPoint autenticacaoJwtEntryPoint,
+                                SessaoService sessaoService) {
+        this.autenticacaoService = autenticacaoService;
+        this.autenticacaoJwtEntryPoint = autenticacaoJwtEntryPoint;
+        this.sessaoService = sessaoService;
+    }
 
     @Value("${cors.allowedOrigins:http://localhost:5173}")
     private List<String> corsAllowedOrigins;
@@ -66,6 +72,7 @@ public class SecurityConfiguracao {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(URLS_PERMITIDAS).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/clientes").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(handling -> handling
@@ -88,13 +95,8 @@ public class SecurityConfiguracao {
     }
 
     @Bean
-    public AutenticacaoEntryPoint jwtAuthenticationEntryPointBean() {
-        return new AutenticacaoEntryPoint();
-    }
-
-    @Bean
     public AutenticacaoFilter jwtAuthenticationFilterBean() {
-        return new AutenticacaoFilter(autenticacaoService, jwtAuthenticationUtilBean());
+        return new AutenticacaoFilter(autenticacaoService, jwtAuthenticationUtilBean(), sessaoService);
     }
 
     @Bean

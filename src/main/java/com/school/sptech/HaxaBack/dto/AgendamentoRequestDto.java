@@ -1,12 +1,14 @@
 package com.school.sptech.HaxaBack.dto;
 
+import com.school.sptech.HaxaBack.entity.StatusAgendamento;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class AgendamentoRequestDto {
 
@@ -19,27 +21,36 @@ public class AgendamentoRequestDto {
     @NotNull
     private LocalTime horario;
 
-    @Schema(description = "Situação atual do agendamento", example = "pendente",allowableValues = {
-                    "pendente",
-                    "confirmado",
-                    "concluído",
-                    "cancelado"
-            })
-    @NotBlank
-    private String status;
+    @Schema(description = "Situação atual do agendamento", example = "Pendente")
+    @NotNull
+    private StatusAgendamento status;
 
     @Schema(description = "ID do cliente responsável pelo agendamento", example = "1")
     @NotNull
     private Integer fkUsuario;
 
+    @Schema(description = "ID do funcionário responsável pelo atendimento", example = "1")
+    @NotNull
+    private Integer fkFuncionario;
+
+    @Schema(description = "ID do dependente atendido (opcional)", example = "1")
+    private Integer fkDependente;
+
+    @Schema(description = "IDs dos serviços associados ao agendamento", example = "[1]")
+    @NotEmpty
+    private List<Integer> servicosIds;
+
     public AgendamentoRequestDto() {
     }
 
-    public AgendamentoRequestDto(LocalDate data, LocalTime horario, String status, Integer fkUsuario) {
+    public AgendamentoRequestDto(LocalDate data, LocalTime horario, StatusAgendamento status, Integer fkUsuario, Integer fkFuncionario, Integer fkDependente, List<Integer> servicosIds) {
         this.data = data;
         this.horario = horario;
         this.status = status;
         this.fkUsuario = fkUsuario;
+        this.fkFuncionario = fkFuncionario;
+        this.fkDependente = fkDependente;
+        this.servicosIds = servicosIds;
     }
 
     public LocalDate getData() {
@@ -58,11 +69,11 @@ public class AgendamentoRequestDto {
         this.horario = horario;
     }
 
-    public String getStatus() {
+    public StatusAgendamento getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusAgendamento status) {
         this.status = status;
     }
 
@@ -72,5 +83,29 @@ public class AgendamentoRequestDto {
 
     public void setFkUsuario(Integer fkUsuario) {
         this.fkUsuario = fkUsuario;
+    }
+
+    public Integer getFkFuncionario() {
+        return fkFuncionario;
+    }
+
+    public void setFkFuncionario(Integer fkFuncionario) {
+        this.fkFuncionario = fkFuncionario;
+    }
+
+    public Integer getFkDependente() {
+        return fkDependente;
+    }
+
+    public void setFkDependente(Integer fkDependente) {
+        this.fkDependente = fkDependente;
+    }
+
+    public List<Integer> getServicosIds() {
+        return servicosIds;
+    }
+
+    public void setServicosIds(List<Integer> servicosIds) {
+        this.servicosIds = servicosIds;
     }
 }
