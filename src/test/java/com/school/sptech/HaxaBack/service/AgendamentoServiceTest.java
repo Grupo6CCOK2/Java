@@ -3,7 +3,6 @@ package com.school.sptech.HaxaBack.service;
 
 import com.school.sptech.HaxaBack.entity.Agendamento;
 import com.school.sptech.HaxaBack.entity.Cliente;
-import com.school.sptech.HaxaBack.entity.DependenteId;
 import com.school.sptech.HaxaBack.entity.Funcionario;
 import com.school.sptech.HaxaBack.entity.Servico;
 import com.school.sptech.HaxaBack.entity.StatusAgendamento;
@@ -184,8 +183,7 @@ class AgendamentoServiceTest {
                     .thenReturn(Optional.of(new Cliente()));
             Mockito.when(funcionarioRepository.findById(funcionarioId))
                     .thenReturn(Optional.of(new Funcionario()));
-            Mockito.when(dependenteRepository.findById(
-                            new DependenteId(dependenteId, clienteId)))
+            Mockito.when(dependenteRepository.findByIdDependentesAndUsuarioId(dependenteId, clienteId))
                     .thenReturn(Optional.empty());
 
             Assertions.assertThrows(ObjetoNaoEncontradoException.class,
@@ -344,8 +342,7 @@ class AgendamentoServiceTest {
             Mockito.when(agendamentoRepository.existsById(id)).thenReturn(true);
             Mockito.when(funcionarioRepository.findById(funcionarioId))
                     .thenReturn(Optional.of(new Funcionario()));
-            Mockito.when(dependenteRepository.findById(
-                            new DependenteId(dependenteId, clienteId)))
+            Mockito.when(dependenteRepository.findByIdDependentesAndUsuarioId(dependenteId, clienteId))
                     .thenReturn(Optional.empty());
 
             Assertions.assertThrows(ObjetoNaoEncontradoException.class,

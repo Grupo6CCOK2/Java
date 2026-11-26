@@ -3,7 +3,6 @@ package com.school.sptech.HaxaBack.service;
 import com.school.sptech.HaxaBack.entity.Agendamento;
 import com.school.sptech.HaxaBack.entity.Cliente;
 import com.school.sptech.HaxaBack.entity.Dependente;
-import com.school.sptech.HaxaBack.entity.DependenteId;
 import com.school.sptech.HaxaBack.entity.Funcionario;
 import com.school.sptech.HaxaBack.entity.ItemServico;
 import com.school.sptech.HaxaBack.entity.Servico;
@@ -161,7 +160,7 @@ public class AgendamentoService {
         if (dependenteId == null) {
             return null;
         }
-        return dependenteRepository.findById(new DependenteId(dependenteId, clienteId))
+        return dependenteRepository.findByIdDependentesAndUsuarioId(dependenteId, clienteId)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException("Dependente não encontrado!"));
     }
 
@@ -179,7 +178,7 @@ public class AgendamentoService {
     private List<ItemServico> salvarItensServico(Agendamento agendamento, List<Servico> servicos) {
         List<ItemServico> itens = new ArrayList<>();
         for (Servico servico : servicos) {
-            itens.add(new ItemServico(agendamento, servico, servico.getValor()));
+            itens.add(new ItemServico(agendamento, servico, servico.getValor().doubleValue()));
         }
         return itemServicoRepository.saveAll(itens);
     }

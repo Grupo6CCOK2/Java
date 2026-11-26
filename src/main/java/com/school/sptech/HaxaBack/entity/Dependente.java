@@ -2,12 +2,19 @@ package com.school.sptech.HaxaBack.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "Dependentes")
 public class Dependente {
 
-    @EmbeddedId
-    private DependenteId id;
+    @Id
+    @Column(name = "idDependentes")
+    private Integer idDependentes;
+
+    @Id
+    @Column(name = "Usuario_idUsuario", nullable = false)
+    private Integer usuarioId;
 
     @Column(name = "nome", nullable = false, length = 45)
     private String nome;
@@ -16,26 +23,34 @@ public class Dependente {
     private String parentesco;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("usuarioId")
-    @JoinColumn(name = "Usuario_idUsuario", nullable = false)
+    @JoinColumn(name = "Usuario_idUsuario", insertable = false, updatable = false, nullable = false)
     private Cliente usuario;
 
     public Dependente() {
     }
 
-    public Dependente(DependenteId id, String nome, String parentesco, Cliente usuario) {
-        this.id = id;
+    public Dependente(Integer idDependentes, Integer usuarioId, String nome, String parentesco, Cliente usuario) {
+        this.idDependentes = idDependentes;
+        this.usuarioId = usuarioId;
         this.nome = nome;
         this.parentesco = parentesco;
         this.usuario = usuario;
     }
 
-    public DependenteId getId() {
-        return id;
+    public Integer getIdDependentes() {
+        return idDependentes;
     }
 
-    public void setId(DependenteId id) {
-        this.id = id;
+    public void setIdDependentes(Integer idDependentes) {
+        this.idDependentes = idDependentes;
+    }
+
+    public Integer getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Integer usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public String getNome() {
@@ -60,5 +75,12 @@ public class Dependente {
 
     public void setUsuario(Cliente usuario) {
         this.usuario = usuario;
+        this.usuarioId = usuario != null ? usuario.getId() : null;
+    }
+
+    public boolean chavesIguais(Dependente outro) {
+        if (outro == null) return false;
+        return Objects.equals(idDependentes, outro.idDependentes)
+                && Objects.equals(usuarioId, outro.usuarioId);
     }
 }

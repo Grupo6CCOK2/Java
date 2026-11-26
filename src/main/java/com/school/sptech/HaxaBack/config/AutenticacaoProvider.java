@@ -24,8 +24,8 @@ import com.school.sptech.HaxaBack.service.AutenticacaoService;
  *
  * <h3>Fluxo de autenticação no login:</h3>
  * <pre>
- *   POST /usuarios/login {email, senha}
- *     → UsuarioService.autenticar()
+ *   POST /clientes/login {email, senha}
+ *     → ClienteService.autenticar()
  *       → AuthenticationManager.authenticate()
  *         → AutenticacaoProvider.authenticate()  ← você está aqui
  *           → AutenticacaoService.loadUserByUsername()  (busca no banco)

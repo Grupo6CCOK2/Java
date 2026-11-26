@@ -3,7 +3,6 @@ package com.school.sptech.HaxaBack.dto;
 import com.school.sptech.HaxaBack.entity.StatusAgendamento;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -195,7 +194,7 @@ public class AgendamentoResponseDto {
         private String tipoServico;
 
         @Schema(description = "Preço unitário aplicado no agendamento", example = "50.00")
-        private BigDecimal precoUnitario;
+        private Double precoUnitario;
 
         public Integer getIdServico() {
             return idServico;
@@ -213,11 +212,11 @@ public class AgendamentoResponseDto {
             this.tipoServico = tipoServico;
         }
 
-        public BigDecimal getPrecoUnitario() {
+        public Double getPrecoUnitario() {
             return precoUnitario;
         }
 
-        public void setPrecoUnitario(BigDecimal precoUnitario) {
+        public void setPrecoUnitario(Double precoUnitario) {
             this.precoUnitario = precoUnitario;
         }
     }

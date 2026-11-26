@@ -54,9 +54,7 @@ public class AgendamentoMapper {
         AgendamentoResponseDto.DependenteResponseDto dependenteDto = null;
         if (entity.getDependente() != null) {
             dependenteDto = new AgendamentoResponseDto.DependenteResponseDto();
-            if (entity.getDependente().getId() != null) {
-                dependenteDto.setIdDependentes(entity.getDependente().getId().getIdDependentes());
-            }
+            dependenteDto.setIdDependentes(entity.getDependente().getIdDependentes());
             dependenteDto.setNome(entity.getDependente().getNome());
             dependenteDto.setParentesco(entity.getDependente().getParentesco());
         }

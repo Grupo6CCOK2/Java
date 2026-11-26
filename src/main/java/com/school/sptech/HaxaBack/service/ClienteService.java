@@ -67,10 +67,10 @@ public class ClienteService {
 
     @Transactional
     public ClienteTokenDto autenticar(Cliente cliente) {
-        final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
+        final UsernamePasswordAuthenticationToken credenciais = new UsernamePasswordAuthenticationToken(
                 cliente.getEmail(), cliente.getSenha());
 
-        final Authentication authentication = this.authenticationManager.authenticate(credentials);
+        final Authentication authentication = this.authenticationManager.authenticate(credenciais);
 
         Cliente clienteAutenticado =
                 clienteRepository.findByEmail(cliente.getEmail())

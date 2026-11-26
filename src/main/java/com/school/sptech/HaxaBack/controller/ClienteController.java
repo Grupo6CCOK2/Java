@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
-@Tag(name = "Clientes",description = "Gerenciamento de clientes")
+@Tag(name = "Clientes", description = "Gerenciamento de clientes")
 public class ClienteController {
 
     public static final String COOKIE_NOME = "authToken";
@@ -35,9 +35,9 @@ public class ClienteController {
     @Value("${jwt.validity}")
     private long jwtValidity;
 
-    private final ClienteService clienteService;
     private final SessaoService sessaoService;
     private final GerenciadorTokenJwt gerenciadorTokenJwt;
+    private final ClienteService clienteService;
 
     public ClienteController(ClienteService clienteService,
                              SessaoService sessaoService,
